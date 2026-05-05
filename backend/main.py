@@ -177,8 +177,20 @@ FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
 
 NO_CACHE_HEADERS = {"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
 
+if FRONTEND_DIR.exists():
+    app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+
 @app.get("/")
 def serve_index():
+    return FileResponse(FRONTEND_DIR / "index.html", headers=NO_CACHE_HEADERS)
+
+@app.get("/{full_path:path}", include_in_schema=False)
+def serve_frontend(full_path: str):
+    if full_path.startswith("api/"):
+        return {"error": "Not found"}
+    file_path = FRONTEND_DIR / full_path
+    if file_path.exists():
+        return FileResponse(file_path)
     return FileResponse(FRONTEND_DIR / "index.html", headers=NO_CACHE_HEADERS)
 
 if __name__ == "__main__":
