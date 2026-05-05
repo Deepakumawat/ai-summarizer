@@ -1,4 +1,4 @@
-﻿from ai_client import client as _fallback_client
+﻿from ai_client import client as _fallback_client, GROQ_MODEL
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
